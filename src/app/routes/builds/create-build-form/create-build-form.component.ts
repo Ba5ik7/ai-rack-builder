@@ -48,6 +48,7 @@ export class CreateBuildFormComponent {
   buildService = inject(BuildsService);
 
   form = inject(FormBuilder).nonNullable.group({
+    id: [''],
     title: ['', Validators.required],
     description: ['', Validators.required],
   });
