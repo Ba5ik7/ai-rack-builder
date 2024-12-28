@@ -1,4 +1,5 @@
-import { Injectable, linkedSignal, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 
 export interface CreateBuildRequestBody {
   id: string;
@@ -16,6 +17,8 @@ export interface BuildCardItem {
   providedIn: 'root',
 })
 export class BuildsService {
+  httpClient = inject(HttpClient);
+
   builds = signal([
     {
       id: '1',
@@ -53,6 +56,7 @@ export class BuildsService {
   }
 
   getBuild(buildId: string) {
+    this.httpClient.get(`/api/rack-builds`).subscribe(console.log);
     return this.builds().find((build) => build.id === buildId);
   }
 }
