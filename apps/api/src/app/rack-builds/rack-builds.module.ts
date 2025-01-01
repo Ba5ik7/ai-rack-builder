@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { RackBuildsService } from './rack-builds.service';
-import { RackBuildsController } from './rack-builds.controller';
+import { RackBuildsService } from './services/rack-builds.service';
+import { RackBuildsController } from './controllers/rack-builds.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { BuildDocument, BuildDocumentSchema } from './schemas/build.schema';
 import {
@@ -10,6 +10,7 @@ import {
 import { RackDocument, RackDocumentSchema } from './schemas/rack.schema';
 import { RacksService } from './services/racks.service';
 import { RackComponentsService } from './services/rack-components.service';
+import { RackComponentsController } from './controllers/rack-components.controller';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { RackComponentsService } from './services/rack-components.service';
     ]),
   ],
   providers: [RackBuildsService, RacksService, RackComponentsService],
-  controllers: [RackBuildsController],
+  controllers: [RackBuildsController, RackComponentsController],
 })
 export class RackBuildsModule {}

@@ -13,17 +13,17 @@ export class RackComponentsService {
     private rackComponentDocumentModel: Model<TRackComponentDocument>
   ) {}
 
+  async createRackComponent(data: RackComponentDocument) {
+    const newRackComponent = new this.rackComponentDocumentModel(data);
+    return await newRackComponent.save();
+  }
+
   async getRackComponents() {
     return await this.rackComponentDocumentModel.find().exec();
   }
 
   async getRackComponentById(id: string) {
     return await this.rackComponentDocumentModel.findById(id).exec();
-  }
-
-  async createRackComponent(data: RackComponentDocument) {
-    const newRackComponent = new this.rackComponentDocumentModel(data);
-    return await newRackComponent.save();
   }
 
   async updateRackComponent(id: string, data: RackComponentDocument) {

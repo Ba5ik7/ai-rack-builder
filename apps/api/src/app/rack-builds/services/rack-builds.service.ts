@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { BuildDocument, TBuildDocument } from './schemas/build.schema';
+import { BuildDocument, TBuildDocument } from '../schemas/build.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class RackBuildsService {
     return await this.buildDocumentModel.find().exec();
   }
 
-  async getBuild(id: string) {
+  async getBuildById(id: string) {
     return await this.buildDocumentModel.findById(id).exec();
   }
 

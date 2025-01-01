@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { RackBuildsService } from './rack-builds.service';
-import { BuildDocument } from './schemas/build.schema';
+import { RackBuildsService } from '../services/rack-builds.service';
+import { BuildDocument } from '../schemas/build.schema';
 
 @Controller('rack-builds')
 export class RackBuildsController {
@@ -19,8 +19,9 @@ export class RackBuildsController {
   }
 
   @Get(':id')
-  getBuild(@Param('id') id: string) {
-    return this.rackBuilds.getBuild(id);
+  getBuildById(@Param('id') id: string) {
+    console.log(id)
+    return this.rackBuilds.getBuildById(id);
   }
 
   @Post(':id')
