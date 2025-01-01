@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { firstValueFrom, tap } from 'rxjs';
 
 export interface IBuild {
@@ -39,7 +39,7 @@ export type TBuildCard = Pick<
 export class BuildsService {
   private readonly RACK_BUILD_ENDPOINT = '/api/rack-builds';
   private readonly httpClient = inject(HttpClient);
-  // builds = signal<IBuild[]>([]);
+
   builds = rxResource({
     loader: () =>
       this.httpClient.get<TGetBuildsResponseBody>(this.RACK_BUILD_ENDPOINT),

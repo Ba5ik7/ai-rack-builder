@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { BuildDescriptionCardComponent } from './build-description-card/build-description-card.component';
 import { BuildViewerCardComponent } from './build-viewer-card/build-viewer-card.component';
 import { BuildComponentsListCardComponent } from './build-components-list-card/build-components-list-card.component';
