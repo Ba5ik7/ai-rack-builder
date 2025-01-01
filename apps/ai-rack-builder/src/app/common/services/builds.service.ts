@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, linkedSignal, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { tap } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { firstValueFrom, tap } from 'rxjs';
 
 export interface IBuild {
   _id: string;
@@ -28,54 +28,58 @@ export type TCreateBuildRequestBody = Pick<
 >;
 export type TCreateBuildResponseBody = IBuild;
 export type TGetBuildsResponseBody = IBuild[];
-export type TBuildCard = Pick<IBuild, '_id' | 'title' | 'description' | 'thumbnail'>;
+export type TBuildCard = Pick<
+  IBuild,
+  '_id' | 'title' | 'description' | 'thumbnail'
+>;
 
 @Injectable({
   providedIn: 'root',
 })
 export class BuildsService {
-  httpClient = inject(HttpClient);
-
-  RACK_BUILD_ENDPOINT = '/api/rack-builds';
-  builds = signal<IBuild[] | undefined>(undefined);
+  private readonly RACK_BUILD_ENDPOINT = '/api/rack-builds';
+  private readonly httpClient = inject(HttpClient);
+  // builds = signal<IBuild[]>([]);
+  builds = rxResource({
+    loader: () =>
+      this.httpClient.get<TGetBuildsResponseBody>(this.RACK_BUILD_ENDPOINT),
+  });
 
   createBuild(newBuild: TCreateBuildRequestBody) {
-    return toSignal(
-      this.httpClient.post<TCreateBuildResponseBody>(
-        this.RACK_BUILD_ENDPOINT,
-        newBuild
-      )
-    );
-  }
-
-  getBuilds() {
-    return toSignal(
+    return firstValueFrom(
       this.httpClient
-        .get<TGetBuildsResponseBody>(this.RACK_BUILD_ENDPOINT)
-        .pipe(tap((builds) => this.builds.set(builds)))
+        .post<TCreateBuildResponseBody>(this.RACK_BUILD_ENDPOINT, newBuild)
+        .pipe(tap((build) => this.builds.update((p = []) => [...p, build])))
     );
   }
 
-  getBuild(id: string) {
-    return toSignal(
-      this.httpClient.get<IBuild>(`${this.RACK_BUILD_ENDPOINT}/${id}`)
-    );
-  }
+  selectedBuildId = signal<string | null>(null);
+  build = rxResource({
+    request: () => this.selectedBuildId(),
+    loader: ({ request: id }) =>
+      this.httpClient.get<IBuild>(`${this.RACK_BUILD_ENDPOINT}/${id}`),
+  });
 
   updateBuild(id: string, updatedBuild: TCreateBuildRequestBody) {
-    return toSignal(
-      this.httpClient.post<TCreateBuildResponseBody>(
-        `${this.RACK_BUILD_ENDPOINT}/${id}`,
-        updatedBuild
-      )
+    return firstValueFrom(
+      this.httpClient
+        .post<TCreateBuildResponseBody>(
+          `${this.RACK_BUILD_ENDPOINT}/${id}`,
+          updatedBuild
+        )
+        .pipe(tap((build) => this.build.update(() => build)))
     );
   }
 
   deleteBuild(id: string) {
-    return toSignal(
-      this.httpClient.delete<TCreateBuildResponseBody>(
-        `${this.RACK_BUILD_ENDPOINT}/${id}`
-      )
+    return firstValueFrom(
+      this.httpClient
+        .delete<TCreateBuildResponseBody>(`${this.RACK_BUILD_ENDPOINT}/${id}`)
+        .pipe(
+          tap(() =>
+            this.builds.update((p = []) => p.filter((b) => b._id !== id))
+          )
+        )
     );
   }
 }

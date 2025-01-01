@@ -36,7 +36,6 @@ import {
     </mat-card>
     }
   `,
-  styles: ``,
 })
 export class BuildDescriptionCardComponent {
   dialog = inject(MatDialog);

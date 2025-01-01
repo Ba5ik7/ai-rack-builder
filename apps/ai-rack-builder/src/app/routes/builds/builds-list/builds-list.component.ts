@@ -1,5 +1,5 @@
 import { Component, inject, linkedSignal } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BuildsService } from '../../../common/services/builds.service';
 import { BuildCreateFormComponent } from '../build-create-form/build-create-form.component';
 import { BuildCardComponent } from './build-card/build-card.component';
@@ -29,9 +29,9 @@ export class BuildsListComponent {
   buildsService = inject(BuildsService);
 
   buildCardItem = linkedSignal({
-    source: this.buildsService.builds,
-    computation: (newBuilds) =>
-      newBuilds?.map(({ _id, title, description, thumbnail }) => ({
+    source: this.buildsService.builds.value,
+    computation: (newBuilds = []) =>
+      newBuilds.map(({ _id, title, description, thumbnail }) => ({
         _id,
         title,
         description,
@@ -44,19 +44,14 @@ export class BuildsListComponent {
   }
 }
 
+// * Dialog
 @Component({
   selector: 'app-create-build-cta-dialog',
-  imports: [BuildCreateFormComponent],
-  styles: [
-    `
-      :host {
-        display: flex;
-        gap: 1rem;
-        padding: 1rem;
-        justify-content: center;
-      }
-    `,
-  ],
-  template: `<app-build-create-form></app-build-create-form>`,
+  imports: [BuildCreateFormComponent, MatDialogModule],
+  template: `
+    <mat-dialog-content>
+      <app-build-create-form></app-build-create-form>
+    </mat-dialog-content>
+  `,
 })
 export class CreateBuildDialogComponent {}

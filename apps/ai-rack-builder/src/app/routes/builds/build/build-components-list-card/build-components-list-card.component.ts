@@ -11,6 +11,6 @@ import { MatCardModule } from '@angular/material/card';
       </mat-card-content>
     </mat-card>
   `,
-  styles: ``,
+  styles: `mat-card { height: 100%; }`,
 })
 export class BuildComponentsListCardComponent {}
