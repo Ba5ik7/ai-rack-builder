@@ -18,16 +18,9 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./routes/builds/builds.component').then(
-            (m) => m.BuildsComponent
-          ),
-      },
-      {
-        path: ':buildId',
-        loadComponent: () =>
-          import('./routes/builds/build/build.component').then(
-            (m) => m.BuildComponent
+        loadChildren: () =>
+          import('./routes/builds/builds.routes').then(
+            (m) => m.buildsRoutes
           ),
       },
     ],

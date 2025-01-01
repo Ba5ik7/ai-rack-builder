@@ -1,21 +1,22 @@
 import { Component, inject } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute } from '@angular/router';
 import { BuildsService } from '../../../common/services/builds.service';
+import { BuildDescriptionCardComponent } from './build-description-card/build-description-card.component';
+import { BuildViewerCardComponent } from './build-viewer-card/build-viewer-card.component';
+import { BuildComponentsListCardComponent } from './build-components-list-card/build-components-list-card.component';
 
 @Component({
   selector: 'app-build',
   styles: ``,
-  imports: [MatCardModule],
+  imports: [
+    BuildComponentsListCardComponent,
+    BuildDescriptionCardComponent,
+    BuildViewerCardComponent,
+  ],
   template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Build</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Build content {{ build }}</p>
-      </mat-card-content>
-    </mat-card>
+    <app-build-components-list-card></app-build-components-list-card>
+    <app-build-viewer-card></app-build-viewer-card>
+    <app-build-description-card [build]="build()"></app-build-description-card>
   `,
 })
 export class BuildComponent {

@@ -1,5 +1,7 @@
 import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { TBuildCard } from '../../../../common/services/builds.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-build-card',
@@ -23,14 +25,14 @@ import { MatCardModule } from '@angular/material/card';
         }
       }
     `,
-    imports: [MatCardModule],
+    imports: [MatCardModule, RouterModule],
     template: `
-      <mat-card>
+      <mat-card [routerLink]="['/builds', options()._id]">
         <img mat-card-image src="{{ options().thumbnail }}" />
         <h2>{{ options().title }}</h2>
       </mat-card>
     `,
 })
 export class BuildCardComponent {
-  options = input.required<{ thumbnail: string; title: string }>();
+  options = input.required<TBuildCard>();
 }
